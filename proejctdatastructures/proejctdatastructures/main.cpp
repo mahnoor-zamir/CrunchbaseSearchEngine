@@ -28,11 +28,22 @@ void PrintCompanyDetails(HashTable<int, Objects> table, std::string companyname 
 	};
 };
 
-
+void GiveAffiliationName(HashTable<int, People> table, std::string first, std::string last) {
+	
+	for (int i = 0; i <= table.size_; i++) {
+		People temp;
+		temp = table.Get(i);
+		if (temp.first_name == first && temp.last_name == last) {
+			std::cout << "Affiliation is: " << temp.affiliation_name;
+			return;
+		};
+	};
+};
 
 int main()
 {
-	//HashTable<int, Objects> HashObjects = parseObjects();
+	HashTable<int, People> HashObjects = parsePeople();
 	//PrintCompanyDetails(HashObjects, "ChatRandom");
+	GiveAffiliationName(HashObjects, "Raju", "Vegesna");
 	return 0;
 }
