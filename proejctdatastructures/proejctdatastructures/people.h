@@ -18,10 +18,6 @@ public:
     std::string affiliation_name;
 };
 
-std::ostream& operator<<(std::ostream& out, const People& p) {
-  out << p.first_name << " " << p.last_name << " (" << p.affiliation_name << ")";
-  return out;
-}
 
 HashTable<int, People> parsePeople()
 {
