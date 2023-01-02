@@ -1,9 +1,9 @@
 #include <iostream>
 #include <fstream>
-
 #include <string>
 #include <sstream>
 
+#include "AVLTree.h"
 #include "hashtable.h"
 #include "people.h"
 #include "degrees.h"
@@ -14,7 +14,6 @@
 #include "offices.h"
 #include "funding_rounds.h"
 #include "acquisitions.h"
-
 
 
 void GetPersonsID(HashTable<int, People> table, std::string first, std::string last) {
@@ -176,11 +175,15 @@ void GiveEmployeeList(HashTable<int, People> peopleTable, std::string company_na
     }
 }
 
+void CompanyInCategory(HashTable<int, Objects> table, std::string categoryname){
+
+};
+
 int main()
 {
-	HashTable<int, People> HashObjects = parsePeople();
+	AVLTree<People> Ppl = parsePeople();
+  AVLTree<Degree> Deg = parseDegree();
 	HashTable<int, Objects> HashObjects2 = parseObjects();
-	HashTable<int, Degree> HashObjects3 = parseDegree();
 	HashTable<int, Relationship> HashObjects4 = parseRelationship();
 	HashTable<int, Offices> HashObjects5 = parseOffices();	
 	HashTable<int, Acquisition> HashObjects6 = parseAcquisition();	
@@ -191,5 +194,8 @@ int main()
 	//GetPersonsID(HashObjects, "Raju", "Vegesna");
 	//GetCompanyId(HashObjects2, "Flektor");
 	//GiveEmployeeList(HashObjects, "Digg");
+  //   std::string s = "p:4";
+  // People* p = Ppl.Search(s);
+  // std::cout<< p->first_name;
 	return 0;
 }
