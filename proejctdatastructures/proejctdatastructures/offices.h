@@ -36,7 +36,7 @@ HashTable<int, Offices> parseOffices()
     }
 
     // Create a hash table to store the data
-    HashTable<int, Offices> data(10000);
+    HashTable<int, Offices> data(200000);
     // Read the header line of the CSV file
     std::string header;
     std::getline(file, header);
@@ -119,8 +119,8 @@ HashTable<int, Offices> parseOffices()
 
     // Close the file
     file.close();
-    int key = 1234;
-    Offices row = data.Get(key);
+    //int key = 1234;
+    //Offices row = data.Get(key);
 
     // Access the attributes of the record
     //std::cout << "Office ID: " << row.office_id << std::endl;
@@ -128,7 +128,7 @@ HashTable<int, Offices> parseOffices()
 
     // Print the data stored in the hash table
 
-    return 0;
+    return data;
 }
 
 #endif

@@ -99,8 +99,8 @@ HashTable<int, Acquisition> parseAcquisition()
 
     // Close the file
     file.close();
-    int key = 1234;
-    Acquisition row = data.Get(key);
+    //int key = 1234;
+    //Acquisition row = data.Get(key);
 
     // Access the attributes of the record
   //  std::cout << "Acquisition ID: " << row.acquisition_id << std::endl;
@@ -109,7 +109,7 @@ HashTable<int, Acquisition> parseAcquisition()
 
     // Print the data stored in the hash table
 
-    return 0;
+    return data;
 }
 
 #endif

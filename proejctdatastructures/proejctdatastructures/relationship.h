@@ -12,11 +12,11 @@ class Relationship
 public:
 
     std::string relationship_id;
-    int person_object_id;
-    int relationship_object_id;
+    std::string person_object_id;
+    std::string relationship_object_id;
     std::string start_at;
     std::string end_at;
-    bool is_past;
+    std::string is_past;
     std::string title;
 };
 
@@ -32,7 +32,7 @@ HashTable<int, Relationship> parseRelationship()
     }
 
     // Create a hash table to store the data
-    HashTable<int, Relationship> data(10000);
+    HashTable<int, Relationship> data(500000);
     // Read the header line of the CSV file
     std::string header;
     std::getline(file, header);
@@ -69,10 +69,10 @@ HashTable<int, Relationship> parseRelationship()
                 record.relationship_id = column_data;
                 break;
             case 2:
-                record.person_object_id = std::stoi(column_data);
+                record.person_object_id = column_data;
                 break;
             case 3:
-                record.relationship_object_id = std::stoi(column_data);
+                record.relationship_object_id = column_data;
                 break;
             case 4:
                 record.start_at = column_data;
@@ -81,7 +81,7 @@ HashTable<int, Relationship> parseRelationship()
                 record.end_at = column_data;
                 break;
             case 6:
-                record.is_past = (column_data == "true");
+                record.is_past = column_data;
                 break;
             case 7:
                 record.title = column_data;
@@ -100,19 +100,19 @@ HashTable<int, Relationship> parseRelationship()
 
     // Close the file
     file.close();
-    int key = 1;
-    Relationship row = data.Get(key);
+    //int key = 1;
+    //Relationship row = data.Get(key);
 
     // Access the attributes of the record
-    std::cout << "Relationship ID: " << row.relationship_id << std::endl;
-    std::cout << "Start at: " << row.start_at << std::endl;
-    std::cout << "End at: " << row.end_at << std::endl;
-    std::cout << "Title: " << row.title << std::endl;
+    //std::cout << "Relationship ID: " << row.relationship_id << std::endl;
+    //std::cout << "Start at: " << row.start_at << std::endl;
+    //std::cout << "End at: " << row.end_at << std::endl;
+    //std::cout << "Title: " << row.title << std::endl;
     // ...
 
     // Print the data stored in the hash table
 
-    return 0;
+    return data;
 }
 
 #endif
