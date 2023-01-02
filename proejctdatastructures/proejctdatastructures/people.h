@@ -107,7 +107,7 @@ HashTable<int, People> parsePeople()
 
     // Print the data stored in the hash table
 
-    return 0;
+    return data;
 }
 
 #endif
