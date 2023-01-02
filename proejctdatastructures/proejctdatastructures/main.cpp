@@ -17,7 +17,7 @@
 
 void PrintCompanyDetails(HashTable<int, Objects> table, std::string companyname ) {
 	
-	for (int i = 0; i <= table.size_; i++) {
+	for (int i = 0; i <= table.size(); i++) {
 		Objects temp;
 		temp = table.Get(i);
 		if (temp.name == companyname) {
@@ -29,21 +29,22 @@ void PrintCompanyDetails(HashTable<int, Objects> table, std::string companyname 
 };
 
 void GiveAffiliationName(HashTable<int, People> table, std::string first, std::string last) {
-	
-	for (int i = 0; i <= table.size_; i++) {
-		People temp;
-		temp = table.Get(i);
-		if (temp.first_name == first && temp.last_name == last) {
-			std::cout << "Affiliation is: " << temp.affiliation_name;
-			return;
-		};
-	};
+  for (auto it = table.begin(); it != table.end(); it++) {
+    if ((*it).second.first_name == first && (*it).second.last_name == last) {
+      std::cout << "Affiliation is: " << (*it).second.affiliation_name << std::endl;
+      break;
+    }
+  }
 };
+
+
 
 int main()
 {
 	HashTable<int, People> HashObjects = parsePeople();
+	People p = HashObjects.Get(17);
+	std::cout << p.first_name;
 	//PrintCompanyDetails(HashObjects, "ChatRandom");
-	GiveAffiliationName(HashObjects, "Raju", "Vegesna");
+	//GiveAffiliationName(HashObjects, "Raju", "Vegesna");
 	return 0;
 }
