@@ -16,13 +16,38 @@
 #include "acquisitions.h"
 
 
-void GetPersonsID(HashTable<int, People> table, std::string first, std::string last) {
-  for (auto it = table.begin(); it != table.end(); it++) {
-    if ((*it).second.first_name == first && (*it).second.last_name == last) {
-      std::cout << "Person's ID is: " << (*it).second.object_id << std::endl;
-      break;
-    }
+std::string GetPersonsID(AVLTree<People> peopletree, AVLTree<People>::Node* node, std::string first, std::string last) {
+  if (node == NULL) {
+    return NULL;
   }
+  if (node->data.first_name == first && node->data.last_name == last){
+    return node->data.object_id;
+  }
+  GetPersonsID(peopletree, node->left , first, last);
+  GetPersonsID(peopletree, node->right , first, last);
+};
+
+void TotalAcquiredEntities(HashTable<int, Acquisition> table, HashTable<int, Objects> table2, std::string companyname){
+	std::string s;
+	int count=0;
+	for (auto it = table2.begin(); it != table2.end(); it++) {
+    if ((*it).second.name == companyname) {
+		if ((*it).second.entity_type != "Company")
+		{
+			continue;
+		}
+		else {
+			s = (*it).second.id;
+		}
+        }
+    }
+	for (auto it = table.begin(); it != table.end(); it++){
+		if ((*it).second.acquiring_object_id == s){
+			count++;
+			continue;
+		}
+	}
+	std::cout<< "Total number of acquired entities by this company is: " <<count <<std::endl;
 };
 
 void GetCompanyId(HashTable<int, Objects> table, const std::string& companyname) {
@@ -39,37 +64,10 @@ void GetCompanyId(HashTable<int, Objects> table, const std::string& companyname)
   }
 };
 
-void GetPersonsEducation(HashTable<int, People> table, HashTable<int, Degree> table2, std::string first, std::string last) {
+void GetEmployeeTitle(AVLTree<People> peopletree, AVLTree<People>::Node* node, HashTable<int, Relationship> table, std::string first, std::string last){
   std::string s;
+  s = GetPersonsID(peopletree, node, first, last);
   for (auto it = table.begin(); it != table.end(); it++) {
-    if ((*it).second.first_name == first && (*it).second.last_name == last) {
-      s = (*it).second.object_id;
-      break;
-    }
-  }
-  for (auto it = table2.begin(); it != table2.end(); it++) {
-    if ((*it).second.object_id == s) {
-	  if ((*it).second.institution!= ""){
-		std::cout << "Person's educational institute is: " << (*it).second.institution << std::endl;
-        break;
-	  }
-	  else{
-		std::cout << "Not found" << std::endl;
-	  }
-    }
-  }  
-};
-
-void GetEmployeeTitle(HashTable<int, People> table, HashTable<int, Relationship> table2, std::string first, std::string last){
-  std::string s;
-  for (auto it = table.begin(); it != table.end(); it++) {
-    if ((*it).second.first_name == first && (*it).second.last_name == last) {
-      s = (*it).second.object_id;
-	  std::cout << s << std::endl;
-      break;
-    }
-  }
-  for (auto it = table2.begin(); it != table2.end(); it++) {
     if ((*it).second.person_object_id == s) {
 		if ((*it).second.is_past=="1")
 		{
@@ -78,7 +76,7 @@ void GetEmployeeTitle(HashTable<int, People> table, HashTable<int, Relationship>
         break;
 	  }
 	        else{
-		std::cout << "Record Not found" << std::endl;
+		std::cout << "Record Not Found" << std::endl;
 	  }
 		}
 		
@@ -135,67 +133,113 @@ void GetCompanyAddress(HashTable<int, Objects> hashObject, HashTable<int, Office
     }
 }
 
-void TotalAcquiredEntities(HashTable<int, Acquisition> table, HashTable<int, Objects> table2, std::string companyname){
-	std::string s;
-	int count=0;
-	for (auto it = table2.begin(); it != table2.end(); it++) {
-    if ((*it).second.name == companyname) {
-		if ((*it).second.entity_type != "Company")
-		{
-			continue;
-		}
-		else {
-			s = (*it).second.id;
-		}
+void GiveEmployeeList(AVLTree<People> peopletree, AVLTree<People>::Node* node, std::string company_name)
+{
+  if (node == NULL) {
+    return;
+  }
+  if (node->data.affiliation_name == company_name){
+    std::cout << node->data.first_name << " "<< node->data.last_name<< std::endl;
+  }
+  GiveEmployeeList(peopletree, node->left , company_name);
+  GiveEmployeeList(peopletree, node->right , company_name);
+}
+
+void CompanyInCategory(HashTable<int, Objects> table, std::string categoryname) 
+{
+    int count = 0;
+    for (auto it = table.begin(); it != table.end(); it++)
+    {
+        std::cout << "Company List : ";
+        if ((*it).second.category_code == categoryname)
+        {
+            std::cout << "Company ID: " << (*it).second.id << "\tName: " << (*it).second.name << std::endl;
+            count++;
         }
+        break;
     }
-	for (auto it = table.begin(); it != table.end(); it++){
-		if ((*it).second.acquiring_object_id == s){
-			count++;
-			continue;
-		}
-	}
-	std::cout<< "Total number of acquired entities by this company is: " <<count <<std::endl;
+    //displaying the number of companies in given category
+    std::cout << "Number of companies : " << count;
 };
 
-void GiveEmployeeList(HashTable<int, People> peopleTable, std::string company_name)
+void GetCompanyFundingRoundInfo(HashTable<int, Objects> hashObject, HashTable<int, Funding_Rounds> hashFundingRounds, std::string companyname)
 {
-	std:: cout << "Employee List: ";
-	std::string afname;
-    for (auto it = peopleTable.begin(); it != peopleTable.end(); it++)
+    std::string id_store;
+    for (auto it = hashObject.begin(); it != hashObject.end(); it++)
     {
-		afname = (*it).second.affiliation_name;
-        if (afname == company_name)
+        if ((*it).second.name == companyname)
         {
-			std::string f = (*it).second.first_name;
-			std::string l = (*it).second.last_name;
-            std::cout <<"\tName: " << f << " " << l;
+            id_store = (*it).second.id;
+            break;
         }
-
+    }
+    for (auto it = hashFundingRounds.begin(); it != hashFundingRounds.end(); it++)
+    {
+        if ((*it).second.object_id == id_store)
+        {
+            std::cout << "Funding Round Type : " << (*it).second.funding_round_type << "\tRaised Amount : " << (*it).second.raised_amount_usd << std::endl;
+            break;
+        }
+       // continue;
     }
 }
 
-void CompanyInCategory(HashTable<int, Objects> table, std::string categoryname){
-
+void GetPersonsEducation(AVLTree<People> peopletree, AVLTree<People>::Node* node, AVLTree<Degree> degreetree, AVLTree<Degree>::Node* node2, std::string first, std::string last) {
+  std::string s;
+  s = GetPersonsID(peopletree, node, first, last);
+  if (node2 == NULL) {
+    return;
+  }
+  if (node2->data.object_id == s){
+    std::cout<<"Degree: "<<node2->data.degree_type<<std::endl;
+    std::cout<<"Subject: "<<node2->data.subject<<std::endl;
+    std::cout<<"Insitution: "<<node2->data.institution<<std::endl;
+    std::cout<<"Graduated: "<<node2->data.graduated_at<<std::endl;
+    return;
+  }
+  GetPersonsEducation(peopletree, node , degreetree, node2->left, first, last);
+  GetPersonsEducation(peopletree, node , degreetree, node2->right, first, last);
 };
+
+void searchByLocation(HashTable<int, Offices> hashOffice, HashTable <int,Objects> hashObject, std::string location)
+{
+    std::string id_store;
+    for (auto it = hashOffice.begin(); it != hashOffice.end(); it++)
+    {
+        if (((*it).second.region == location) || ((*it).second.city == location))
+        {
+            id_store = (*it).second.object_id;
+                for (auto it = hashObject.begin(); it != hashObject.end(); it++)
+                {
+                  if ((*it).second.id == id_store)
+                  {
+                    std::cout << (*it).second.name << std::endl;
+                  }
+                }
+          return;
+        }
+    }
+
+}
 
 int main()
 {
 	AVLTree<People> Ppl = parsePeople();
   AVLTree<Degree> Deg = parseDegree();
 	HashTable<int, Objects> HashObjects2 = parseObjects();
+  HashTable<int, Funding_Rounds> HashObjects3 = parseFundingRounds();
 	HashTable<int, Relationship> HashObjects4 = parseRelationship();
 	HashTable<int, Offices> HashObjects5 = parseOffices();	
 	HashTable<int, Acquisition> HashObjects6 = parseAcquisition();	
-	//TotalAcquiredEntities(HashObjects6, HashObjects2, "Yahoo!");
-	//GetCompanyAddress(HashObjects2, HashObjects5, "Wetpaint");
-	//GetEmployeeTitle(HashObjects, HashObjects4, "Owen", "Van Natta");
-	//GetPersonsEducation(HashObjects, HashObjects3, "Sridhar", "Gundaiah");
-	//GetPersonsID(HashObjects, "Raju", "Vegesna");
-	//GetCompanyId(HashObjects2, "Flektor");
-	//GiveEmployeeList(HashObjects, "Digg");
-  //   std::string s = "p:4";
-  // People* p = Ppl.Search(s);
-  // std::cout<< p->first_name;
+  //GetCompanyFundingRoundInfo(HashObjects2, HashObjects3, "Scribd");
+  //CompanyInCategory(HashObjects2, "Fitbit");
+  //searchByLocation(HashObjects5, HashObjects2, "SF Bay"); 
+	//TotalAcquiredEntities(HashObjects6, HashObjects2, "Yahoo!"); tested
+	//GetCompanyAddress(HashObjects2, HashObjects5, "Wetpaint"); tested
+	//GetEmployeeTitle(HashObjects, HashObjects4, "Owen", "Van Natta"); tested
+	//GetPersonsEducation(Ppl, Ppl.root_, Deg, Deg.root_, "Ian", "Reardon"); 
+	//GetPersonsID(Ppl, Ppl.root_, "Raju", "Vegesna"); tested
+	//GetCompanyId(HashObjects2, "Flektor"); tested
+	//GiveEmployeeList(Ppl, Ppl.root_, "Helio"); tested
 	return 0;
 }

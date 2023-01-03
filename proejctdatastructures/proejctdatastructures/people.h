@@ -44,6 +44,7 @@ std::ostream& operator<<(std::ostream& out, const People& ppl) {
     out << "Last Name: " << ppl.last_name << std::endl;
     out << "Birthplace: " << ppl.birthplace << std::endl;
     out << "Affiliation Name: " << ppl.affiliation_name << std::endl;
+    return out;
 }
 
 

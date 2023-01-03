@@ -39,7 +39,7 @@ HashTable<int, Funding_Rounds> parseFundingRounds()
     }
 
     // Create a hash table to store the data
-    HashTable<int, Funding_Rounds> data(10000);
+    HashTable<int, Funding_Rounds> data(60000);
     // Read the header line of the CSV file
     std::string header;
     std::getline(file, header);
@@ -125,8 +125,8 @@ HashTable<int, Funding_Rounds> parseFundingRounds()
 
     // Close the file
     file.close();
-    int key = 1;
-    Funding_Rounds row = data.Get(key);
+    //int key = 1;
+    //Funding_Rounds row = data.Get(key);
 
     // Access the attributes of the record
     //std::cout << "Funding object ID: " << row.funding_round_id << std::endl;
@@ -134,7 +134,7 @@ HashTable<int, Funding_Rounds> parseFundingRounds()
 
     // Print the data stored in the hash table
 
-    return 0;
+    return data;
 }
 
 

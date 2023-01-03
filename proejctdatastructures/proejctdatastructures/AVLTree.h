@@ -1,5 +1,5 @@
-#ifndef CONFEDERATION_CPP_AVLTREE_H
-#define CONFEDERATION_CPP_AVLTREE_H
+#ifndef AVLTREE_H
+#define AVLTREE_H
 #include <iostream>
 template <typename t>
 class AVLTree {
@@ -30,8 +30,9 @@ public:
         std::cout << std::endl;
     }
 
-private:
     Node *root_;
+
+private:
 
     int GetHeight(Node *node) {
         return node ? node->height : 0;
@@ -145,14 +146,6 @@ private:
         }
     }
 
-
-    void PrintInorder(Node* node) {
-        if (node) {
-            PrintInorder(node->left);
-            std::cout << node->data << " ";
-            PrintInorder(node->right);
-        }
-    }
 
 };
 

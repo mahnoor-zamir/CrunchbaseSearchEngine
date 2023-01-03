@@ -51,7 +51,7 @@ HashTable<int, Objects> parseObjects() {
     }
 
     // Create a hash table to store the data
-    HashTable<int, Objects> data(500000);
+    HashTable<int, Objects> data(200000);
     // Read the header line of the CSV file
     std::string header;
     std::getline(file, header);

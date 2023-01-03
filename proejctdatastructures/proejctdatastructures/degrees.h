@@ -42,6 +42,7 @@ std::ostream& operator<<(std::ostream& out, const Degree& deg) {
     out << "Subject: " << deg.subject << std::endl;
     out << "Institution: " << deg.institution << std::endl;
     out << "Graduation Date: " << deg.graduated_at << std::endl;
+    return out;
 }
 
 
