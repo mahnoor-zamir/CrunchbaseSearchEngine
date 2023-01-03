@@ -94,7 +94,6 @@ class HashTable {
   std::vector<Node*> table;
   // Hash function to determine the index at which a key should be stored
   size_t Hash(const K& key, int table_size) {
-    // Improved hash function that uses a prime number as the multiplier
     return std::hash<K>()(key) % table_size;
   }
 };
