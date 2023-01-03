@@ -94,11 +94,18 @@ class HashTable {
   std::vector<Node*> table_;
 
   // Hash function to determine the index at which a key should be stored
-  size_t Hash(const K& key) {
-  std::hash<K> hasher;
-  size_t hash_value = hasher(key);
-  return hash_value % size_;
+size_t Hash(const std::string& key) {
+  if (key.empty()) {
+    return 0;
+  }
+  size_t hash_value = 0;
+  for (size_t i = 2; i < key.size(); ++i) {
+    hash_value = hash_value * 31 + key[i];
+  }
+  return hash_value;
 }
+
+
 };
 
 #endif
