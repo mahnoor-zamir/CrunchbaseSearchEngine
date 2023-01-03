@@ -16,7 +16,7 @@ class HashTable {
   HashTable(int size) : size_(size), table_(size) {}
 
   void Set(const K& key, const V& value) {
-    int index = Hash(key) % size_;
+    int index = Hash(key, size_) % size_;
     Node* current = table_[index];
     while (current != nullptr) {
       if (current->key == key) {
@@ -91,21 +91,12 @@ class HashTable {
 
  private:
   int size_;
-  std::vector<Node*> table_;
-
+  std::vector<Node*> table;
   // Hash function to determine the index at which a key should be stored
-size_t Hash(const std::string& key) {
-  if (key.empty()) {
-    return 0;
+  size_t Hash(const K& key, int table_size) {
+    // Improved hash function that uses a prime number as the multiplier
+    return std::hash<K>()(key) % table_size;
   }
-  size_t hash_value = 0;
-  for (size_t i = 2; i < key.size(); ++i) {
-    hash_value = hash_value * 31 + key[i];
-  }
-  return hash_value;
-}
-
-
 };
 
 #endif
